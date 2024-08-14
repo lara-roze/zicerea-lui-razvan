@@ -30,34 +30,40 @@ document.addEventListener('DOMContentLoaded', function () {
             const items = Array.from(section.querySelectorAll('.news-grid-item'));
             const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
+            // Reset heights to auto
             items.forEach(item => {
                 const title = item.querySelector('.titlu-articol');
                 const description = item.querySelector('.articol-sumar');
-                
+
                 if (title) title.style.height = 'auto';
                 if (description) description.style.height = 'auto';
             });
 
-            const maxHeights = {
-                title: 0,
-                description: 0
-            };
+            // Group items in pairs and calculate the max height for each pair
+            for (let i = 0; i < items.length; i += 2) {
+                const pair = items.slice(i, i + 2);
 
-            items.forEach(item => {
-                const title = item.querySelector('.titlu-articol');
-                const description = item.querySelector('.articol-sumar');
+                const maxHeights = {
+                    title: 0,
+                    description: 0
+                };
 
-                if (title) maxHeights.title = Math.max(maxHeights.title, title.scrollHeight);
-                if (description) maxHeights.description = Math.max(maxHeights.description, description.scrollHeight);
-            });
+                pair.forEach(item => {
+                    const title = item.querySelector('.titlu-articol');
+                    const description = item.querySelector('.articol-sumar');
 
-            items.forEach(item => {
-                const title = item.querySelector('.titlu-articol');
-                const description = item.querySelector('.articol-sumar');
+                    if (title) maxHeights.title = Math.max(maxHeights.title, title.scrollHeight);
+                    if (description) maxHeights.description = Math.max(maxHeights.description, description.scrollHeight);
+                });
 
-                if (title) title.style.height = `${maxHeights.title}px`;
-                if (description) description.style.height = `${maxHeights.description}px`;
-            });
+                pair.forEach(item => {
+                    const title = item.querySelector('.titlu-articol');
+                    const description = item.querySelector('.articol-sumar');
+
+                    if (title) title.style.height = `${maxHeights.title}px`;
+                    if (description) description.style.height = `${maxHeights.description}px`;
+                });
+            }
         });
     }
 
@@ -110,12 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add event listener to the button
     mybutton.addEventListener("click", topFunction);
 
-    
-
     // Combine scroll events
     window.onscroll = function() {
         scrollFunction();
-        // myFunction();
     };
-
 });
