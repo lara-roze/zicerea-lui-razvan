@@ -39,16 +39,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (description) description.style.height = 'auto';
             });
 
-            // Group items in pairs and calculate the max height for each pair
-            for (let i = 0; i < items.length; i += 2) {
-                const pair = items.slice(i, i + 2);
+            if (isMobile) {
+                // Process items in pairs for mobile view
+                for (let i = 0; i < items.length; i += 2) {
+                    const pair = items.slice(i, i + 2);
 
+                    const maxHeights = {
+                        title: 0,
+                        description: 0
+                    };
+
+                    pair.forEach(item => {
+                        const title = item.querySelector('.titlu-articol');
+                        const description = item.querySelector('.articol-sumar');
+
+                        if (title) maxHeights.title = Math.max(maxHeights.title, title.scrollHeight);
+                        if (description) maxHeights.description = Math.max(maxHeights.description, description.scrollHeight);
+                    });
+
+                    pair.forEach(item => {
+                        const title = item.querySelector('.titlu-articol');
+                        const description = item.querySelector('.articol-sumar');
+
+                        if (title) title.style.height = `${maxHeights.title}px`;
+                        if (description) description.style.height = `${maxHeights.description}px`;
+                    });
+                }
+            } else {
+                // Process all items together for desktop view
                 const maxHeights = {
                     title: 0,
                     description: 0
                 };
 
-                pair.forEach(item => {
+                items.forEach(item => {
                     const title = item.querySelector('.titlu-articol');
                     const description = item.querySelector('.articol-sumar');
 
@@ -56,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (description) maxHeights.description = Math.max(maxHeights.description, description.scrollHeight);
                 });
 
-                pair.forEach(item => {
+                items.forEach(item => {
                     const title = item.querySelector('.titlu-articol');
                     const description = item.querySelector('.articol-sumar');
 
